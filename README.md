@@ -1,6 +1,26 @@
-# cme-sil3d
-CME Silhouettes: 2D Segmentation Pipeline &amp; 3D Reconstruction Roadmap
+# CME Image Segmentation
 
-This repository implements a robust pipeline for segmenting CME silhouettes. The current implementation focuses on 2D segmentation using a U-Net with a pretrained ResNet18 encoder and a combined Binary Cross Entropy and Dice loss for accurate predictions. It includes comprehensive data preprocessing (handling NaNs and uniform padding), training routines with checkpointing and detailed metric logging (loss and IoU), and visualization functions that display original images, ground truth masks, predicted masks, and overlays.
+Deep learning-based image segmentation for detecting Coronal Mass Ejections (CMEs) in coronagraph images.
 
-Although the current focus is on 2D segmentation, the code is structured to lay the groundwork for future extensions toward full 3D reconstruction of CME silhouettes.
+## Project Overview
+
+This project explores different image segmentation methods for identifying CME regions in coronagraph images.
+
+## Current Work
+
+- Preprocessing CME images
+- Generating ground-truth segmentation masks
+- Comparing semantic segmentation architectures
+- Evaluating models using segmentation metrics
+
+## Models
+
+Currently experimenting with:
+
+- U-Net
+- U-Net++
+- FPN
+- LinkNet
+- DeepLabV3
+- MA-Net
+- UPerNet
