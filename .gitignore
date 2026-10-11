@@ -181,3 +181,21 @@ wandb/
 
 # Trained model weights
 *.pth
+*.pt
+*.ckpt
+output/
+
+# Local datasets
+/data/
+
+# Optuna study databases
+/outputs/**/*.db
+/outputs/**/*.db-*
+/outputs/**/*.sqlite*
+
+# Temporary files
+*.tmp
+.test-tmp-*/
+
+# Experiment configurations, metrics, and prediction figures
+# remain trackable in Git.

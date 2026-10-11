@@ -1,0 +1,16 @@
+# INCOMPLETE: fill null fields with your actual experiment settings before training.
+# Shared dataset paths/shape and checkpoint filename come from the existing pipeline.
+run_name: null
+csv_file: /data/CME_reconstruction/cme_silhouette/processed_dataset_new/file_list.csv
+root_dir: /data/CME_reconstruction/cme_silhouette/processed_dataset_new
+target_size:
+- 832
+- 832
+batch_size: null
+num_workers: null
+num_epochs: null
+learning_rate: null
+checkpoint_path: best_model.pth
+model_name: deeplabv3plus
+alpha_loss: null
+seed: null

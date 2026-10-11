@@ -1,0 +1,3 @@
+# Reserved for future optimization. No ranges or optimization logic are defined.
+model_name: upernet
+search_space: {}

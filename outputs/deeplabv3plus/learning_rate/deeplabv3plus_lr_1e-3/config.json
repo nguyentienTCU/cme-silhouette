@@ -1,0 +1,17 @@
+{
+    "run_name": "deeplabv3plus_lr_1e-3",
+    "csv_file": "/data/CME_reconstruction/cme_silhouette/processed_dataset_new/file_list.csv",
+    "root_dir": "/data/CME_reconstruction/cme_silhouette/processed_dataset_new",
+    "target_size": [
+        832,
+        832
+    ],
+    "batch_size": 12,
+    "num_workers": 8,
+    "num_epochs": 20,
+    "learning_rate": 0.001,
+    "checkpoint_path": "best_model.pth",
+    "model_name": "deeplabv3plus",
+    "alpha_loss": 0.5,
+    "seed": 42
+}
