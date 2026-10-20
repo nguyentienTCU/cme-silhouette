@@ -1,3 +1,25 @@
-# Reserved for future optimization. No ranges or optimization logic are defined.
 model_name: manet
-search_space: {}
+base_config: configs/models/manet.yaml
+
+study_name: manet_hyperparameter_optimization
+n_trials: 10
+
+pruning:
+  n_startup_trials: 3
+  n_warmup_steps: 5
+  interval_steps: 1
+
+search_space:
+  learning_rate:
+    low: 1.0e-6
+    high: 1.0e-3
+
+  batch_size:
+    low: 30
+    high: 60
+    step: 1
+
+  alpha_loss:
+    low: 0.3
+    high: 0.8
+    step: 0.1

@@ -6,6 +6,6 @@ segmentation-models-pytorch
 matplotlib
 wandb
 PyYAML
-# Existing mask-generation and notebook dependencies:
 opencv-python
 scipy
+optuna

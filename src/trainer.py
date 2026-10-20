@@ -1,3 +1,4 @@
+from pathlib import Path
 import logging
 import csv
 import json
@@ -46,7 +47,7 @@ def train_one_epoch(model, dataloader, optimizer, device, alpha_loss):
 
 
 def fit(model, train_loader, val_loader, optimizer, device, config,
-        output_dir, *, save_checkpoints=True, logger=None):
+        output_dir, *, save_checkpoints=True, logger=None, trial=None):
     """Shared epoch loop. Checkpoints still follow strictly improving training loss."""
     best_loss = float('inf')
     best_train_epoch = None
@@ -104,6 +105,12 @@ def fit(model, train_loader, val_loader, optimizer, device, config,
             best_val_iou = val_iou
             best_val_iou_epoch = epoch + 1
 
+        if trial is not None:
+            trial.report(val_iou, step=epoch)
+            if trial.should_prune():
+                from optuna import TrialPruned
+                raise TrialPruned(f'Trial pruned at epoch {epoch+1}')
+
     metrics = {
         'final': history[-1],
         'best_validation': best_validation,
@@ -120,36 +127,92 @@ def fit(model, train_loader, val_loader, optimizer, device, config,
     return metrics
 
 
-def run_training(config, *, output_root=None, save_checkpoints=True,
-                 visualize=True, show=True):
+
+def run_training(config, *, output_root=None, output_dir=None,
+                 save_checkpoints=True, visualize=True, show=True, trial=None):
     """Run the existing pipeline with a caller-provided configuration."""
     import wandb
     from .evaluator import visualize_predictions
 
     config = deepcopy(validate_config(config))
-    output_dir = create_output_dir(config, output_root)
-    # Include storage switches in the saved configuration, without changing hyperparameters.
-    saved_config = dict(config, save_checkpoints=save_checkpoints,
-                        visualize_predictions=visualize, show_predictions=show)
+
+    if output_dir is not None:
+        output_dir = Path(output_dir)
+        output_dir.mkdir(parents=True, exist_ok=False)
+    else:
+        output_dir = create_output_dir(config, output_root)
+
+    saved_config = dict(
+        config,
+        save_checkpoints=save_checkpoints,
+        visualize_predictions=visualize,
+        show_predictions=show
+    )
+
     with (output_dir / 'config.json').open('x', encoding='utf-8') as stream:
         json.dump(saved_config, stream, indent=4)
-    wandb.init(project='cme-segmentation', name=config['run_name'], config=saved_config)
+
+    wandb.init(
+        project='cme-segmentation',
+        name=config['run_name'],
+        config=saved_config
+    )
+
     try:
-        logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(levelname)s - %(message)s'
+        )
+
         torch.manual_seed(config['seed'])
         np.random.seed(config['seed'])
+
         train_loader, val_loader = build_dataloaders(config)
-        wandb.config.update({'total_images': len(train_loader.dataset) + len(val_loader.dataset),
-                             'train_images': len(train_loader.dataset),
-                             'val_images': len(val_loader.dataset)})
+
+        wandb.config.update({
+            'total_images': len(train_loader.dataset) + len(val_loader.dataset),
+            'train_images': len(train_loader.dataset),
+            'val_images': len(val_loader.dataset)
+        })
+
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         logging.info('Training on device: %s', device)
+
         model = build_model(config['model_name']).to(device)
-        optimizer = torch.optim.Adam(model.parameters(), lr=config['learning_rate'])
-        metrics = fit(model, train_loader, val_loader, optimizer, device,
-                      config, output_dir, save_checkpoints=save_checkpoints, logger=wandb)
+
+        optimizer = torch.optim.Adam(
+            model.parameters(),
+            lr=config['learning_rate']
+        )
+
+        metrics = fit(
+            model,
+            train_loader,
+            val_loader,
+            optimizer,
+            device,
+            config,
+            output_dir,
+            save_checkpoints=save_checkpoints,
+            logger=wandb,
+            trial=trial
+        )
+
         if visualize:
-            visualize_predictions(model, val_loader, device, config['model_name'], output_dir, show=show)
-        return {'output_dir': str(output_dir), 'metrics': metrics}
+            visualize_predictions(
+                model,
+                val_loader,
+                device,
+                config['model_name'],
+                output_dir,
+                show=show
+            )
+
+        return {
+            'output_dir': str(output_dir),
+            'metrics': metrics
+        }
+
     finally:
         wandb.finish()
+

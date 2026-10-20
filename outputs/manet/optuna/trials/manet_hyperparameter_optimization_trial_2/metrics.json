@@ -1,0 +1,27 @@
+{
+    "final": {
+        "epoch": 20,
+        "train_loss": 0.35279993894623546,
+        "train_iou": 0.871905621958942,
+        "val_loss": 0.3428863369713712,
+        "val_iou": 0.8822112549239994
+    },
+    "best_validation": {
+        "epoch": 20,
+        "train_loss": 0.35279993894623546,
+        "train_iou": 0.871905621958942,
+        "val_loss": 0.3428863369713712,
+        "val_iou": 0.8822112549239994
+    },
+    "best_val_iou": 0.8822112549239994,
+    "best_val_iou_epoch": 20,
+    "checkpoint_selection": "minimum_train_loss",
+    "best_training": {
+        "epoch": 20,
+        "train_loss": 0.35279993894623546,
+        "train_iou": 0.871905621958942,
+        "val_loss": 0.3428863369713712,
+        "val_iou": 0.8822112549239994
+    },
+    "checkpoint_saved": false
+}

@@ -23,7 +23,6 @@ src/
 scripts/
   train.py            # Run model training
   evaluate.py         # Evaluate trained checkpoints
-  check_project.py    # Verify project structure
 
 tests/                # Unit tests
 outputs/              # Experiment results
@@ -47,7 +46,7 @@ Each model has a YAML configuration in `configs/models/`.
 To train a model:
 
 ```bash
-MPLBACKEND=Agg python scripts/train.py --config configs/models/manet.yaml --no-show
+python scripts/train.py --config configs/models/manet.yaml --no-show
 ```
 
 Replace `manet.yaml` with the configuration of another model as needed. Configurations must contain all required training settings.
@@ -108,7 +107,7 @@ Model checkpoints (`*.pth`) and local W&B files are excluded from Git, while exp
 To evaluate a previously trained model:
 
 ```bash
-MPLBACKEND=Agg python scripts/evaluate.py \
+python scripts/evaluate.py \
   --config config.json \
   --checkpoint path/to/best_model.pth \
   --output-dir outputs/manet/experiments/evaluation_001 \
@@ -128,7 +127,7 @@ python -B scripts/check_project.py
 Run the unit tests:
 
 ```bash
-MPLBACKEND=Agg python -B -m unittest discover -s tests -v
+python -B -m unittest discover -s tests -v
 ```
 
 The tests cover configuration handling, dataset processing, loss functions, IoU calculations, training metrics, checkpoint selection, and output management.

@@ -1,0 +1,21 @@
+{
+    "run_name": "manet_hyperparameter_optimization_trial_3",
+    "csv_file": "/data/CME_reconstruction/cme_silhouette/processed_dataset_new/file_list.csv",
+    "root_dir": "/data/CME_reconstruction/cme_silhouette/processed_dataset_new",
+    "target_size": [
+        832,
+        832
+    ],
+    "batch_size": 38,
+    "num_workers": 8,
+    "num_epochs": 20,
+    "learning_rate": 0.00017636145972670624,
+    "checkpoint_path": "best_model.pth",
+    "model_name": "manet",
+    "alpha_loss": 0.4,
+    "seed": 42,
+    "experiment_type": "experiments",
+    "save_checkpoints": false,
+    "visualize_predictions": false,
+    "show_predictions": false
+}
